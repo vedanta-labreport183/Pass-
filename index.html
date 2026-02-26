@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PASS - Password Manager</title>
+<link rel="icon" type="image/png" sizes="32x32" href="android chrome.jpg">
+
+
+<!-- PWA MANIFEST--->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <!-- 🔹 Meta Description: Shown under your link in Google search -->
+  <!-- Title -->
+<meta property="og:title" content="princekumar.webdevloper@gmail.com">
+<!-- Image -->
+<meta property="og:image" content="android chrome.jpg">
+  <!-- Description -->
+ <meta name="description" content="PASS is an offline-first password manager that helps you securely store, manage, import, and export your credentials directly in your browser. No login, no cloud, full data control stays on your device for maximum privacy and security." />
+  <!-- 🔹 Meta Keywords (optional, Google ignores mostly but other engines use it) -->
+<meta name="keywords" content="password manager, offline password manager, secure credential storage, local password vault, browser password manager, no cloud password manager, privacy focused password manager, credential manager web app, PASS password manager" />
+  
+  <!-- 🔹 Structured Data (JSON-LD Schema) to tell Google what this site is -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PASS - Password Manager",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Web",
+    "url": "https://yourdomain.com",
+    "description": "PASS is an offline-first password manager that stores credentials locally in your browser. No login, no cloud sync, no data collection. Users fully control their data with secure import and export.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": ""
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Prince Kumar"
+    }
+  }
+</script>
+<style data-name="main style">
+  :root{
+    --bg:#0b0f14;
+    --panel:#0f1720;
+    --card:#111922;
+    --muted:#9ca3af;
+    --accent:#1d4ed8;
+    --gap: 10px;
+    --radius:8px;
+    --card-min-height:clamp(90px, 19vh, 160px);
+    --card-img-size:clamp(40px, 8vw, 64px);
+    --header-height:50px;
+  }
+  *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    padding:env(safe-area-inset-top) 12px 24px;
+  }
+
+  /* Header */
+  header{
+    height:var(--header-height);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    padding: 8px 6px;
+    background:linear-gradient(180deg, transparent);
+  }
+  header h1{margin:0;font-weight:600;letter-spacing:3px;font-size:clamp(16px,2.2vw,20px);}
+
+  .top-actions{display:flex;gap:8px;align-items:center;}
+  .btn{
+    background:transparent;border: 0px solid rgba(255,255,255,0.06);
+    color:#fff;padding:2px 2px;border-radius:10px;cursor:pointer;font-size:13px;
+  }
+  .btn.icon{width: 10px;height: 44px;padding:0;display:inline-grid;place-items:center;font-size:25px;border-radius:50%;}
+  .btn.text{display:inline-flex;align-items:center;gap:8px}
+
+  /* Layout */
+  main{padding:calc(var(--gap) + 1px) 0 20px;flex:1;}
+  .layout{display:flex;gap:var(--gap);align-items:flex-start;}
+  .cards-area{flex:1;}
+
+  /* Responsive cards grid: mobile 3 columns, desktop 4 columns */
+  .cards-grid{
+    display:grid;
+    gap: 4px;
+    grid-template-columns: repeat(3, 1fr); /* default mobile 3 */
+    align-items:start;
+  }
+  .card{background:var(--card);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;min-height:var(--card-min-height);}
+  .card .app-img{width:var(--card-img-size);height:var(--card-img-size);border-radius:50%;object-fit:cover;background:;border:1px solid rgba(255,255,255,0.06);}
+  .card .app-name{font-size: 10px;color:var(--muted);margin-top:8px;word-wrap:break-word;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+
+  /* Side panel - full on mobile, drawer on desktop */
+  .side-panel{position:fixed;top:0;right:-100%;width:100%;height:100%;background:rgba(11,15,20,0.97);transition:right .35s ease-in-out;z-index:100;overflow-y:auto;padding:20px;}
+  .side-panel.open{right:0}
+  .side-panel .panel-inner{background:var(--panel);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.05);max-width:980px;margin:0 auto;}
+  .close-panel-btn{position:absolute;top:14px;right:14px;background:#111827;border:none;color:white;font-size:22px;padding:6px 10px;border-radius:8px;cursor:pointer}
+
+  .panel-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border-radius:12px;margin-bottom:10px;border:2px solid rgba(255,255,255,0.06);}
+  .panel-item .left{display:flex;align-items:center;gap:10px}
+  .panel-item img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+  .panel-item .title{font-size:14px;color:#fff}
+  .panel-item .add-btn{background:transparent;border-radius:10px;border:none;color:#fff;font-size:20px;cursor:pointer}
+
+  /* Overlay detail */
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(rgba(106, 96, 203, 0.6),rgba(0,0,0,0.6));z-index:60;padding:16px}
+  .overlay.open{display:flex}
+  .detail-card{background:var(--panel);border-radius:14px;padding:18px;width:min(420px,95%);box-shadow:0 10px 30px rgba(0,0,0,0.6);}
+  .detail-top{display:flex;gap:12px;align-items:center}
+  .detail-top img{width:56px;height:56px;border-radius:50%}
+  .fields{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .field-row{display:flex;gap:8px;align-items:center}
+  .field-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+  .field-row button.copy-field{padding:8px;border-radius:8px;border:none;background:#111827;color:#fff;cursor:pointer}
+
+  .small{font-size:12px;color:var(--muted)}
+  .detail-actions{display:flex;gap:8px;margin-top:12px}
+  .btn.primary{background:var(--accent);border:none;padding:8px 12px;border-radius:8px;color:#fff;cursor:pointer}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+  .add-field{display:flex;gap:8px;margin-top:8px}
+  .add-field input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+  .add-field button{padding:8px;border-radius:8px;border:none;background:#065f46;color:#fff;cursor:pointer}
+  .copy-all{display:block;margin-top:10px;background:#111827;border:none;padding:8px;border-radius:8px;color:#fff;cursor:pointer;width:100%}
+
+  /* Small adjustments for mobile forms */
+  @media (max-width:600px){
+    .field-row{flex-direction:column;gap:6px;position:relative}
+    .field-row input{width:100%;padding-right:60px}
+    .field-row button.copy-field{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:36px;padding:0 8px;font-size:12px}
+    .add-field{flex-direction:column}
+    .add-field input,.add-field button{width:100%}
+    header h1{font-size:16px}
+    body{padding:10px}
+  }
+
+  /* Desktop: 4 columns, sticky aside drawer */
+  @media (min-width:900px){
+    .cards-grid{grid-template-columns: repeat(4, 1fr);}
+    .side-panel{width:420px;right:-520px;height:100vh;padding:28px}
+    .side-panel.open{right:24px}
+    .side-panel .panel-inner{max-width:none;margin:0}
+    main{padding-right: calc(420px + 36px);} /* leave space for drawer */
+  }
+
+  /* Larger screens tweak */
+  @media (min-width:1200px){
+    :root{--card-img-size:64px}
+  }
+  /* keep short two-word names on single line on small screens */
+@media (max-width: 600px) {
+  .app-name.no-break {
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}
+
+</style>
+<style data-name="Footer">
+  /* Footer Styles */
+/* ---------- Force footer full-bleed and remove card side gaps ---------- */
+/* Place this AFTER existing footer CSS so it overrides earlier rules */
+
+.footer {
+  position: relative;        /* allow left/right positioning */
+  left: 50%;
+  right: 50%;
+  width: 100vw;              /* full viewport width */
+  transform: translateX(-50%); /* center it exactly */
+  box-sizing: border-box;
+  padding-left: env(safe-area-inset-left, 12px);   /* preserve notch-safe inset fallback */
+  padding-right: env(safe-area-inset-right, 12px); /* fallback to 12px if env not present */
+  background: var(--bg);     /* keep your background */
+  z-index: 5;
+}
+
+/* keep an inner constraint so desktop-footer remains centered within max width */
+.footer .footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-top: 12px; /* keep your spacing */
+}
+
+/* Remove unwanted tiny left/right margins on mobile cards and make them span inner width */
+.mobile-stack { padding-left: 0; padding-right: 0; }
+.mobile-card {
+  width: 100%;
+  margin: 6px 0;            /* remove side margins */
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* If you had explicit margins on .mobile-card via inline style, ensure they are overridden */
+.mobile-card[style] { margin-left: 0 !important; margin-right: 0 !important; }
+
+/* Keep copyright & desktop-footer aligned inside the inner wrapper */
+.footer .copyright,
+.footer .desktop-footer {
+  max-width: 1200px;
+  margin: 18px auto 0;
+  box-sizing: border-box;
+}
+
+/* When on very small screens, reduce the horizontal safe-area fallback */
+@media (max-width:600px){
+  .footer { padding-left: env(safe-area-inset-left, 10px); padding-right: env(safe-area-inset-right, 10px); }
+}
+
+
+    /* ---------- MOBILE CARDS (the only four containers) ---------- */
+    .mobile-stack { display:block; max-width:100%; margin: auto; }
+
+    .mobile-card {
+      width: calc(100% - 2px);      /* 1px left + 1px right spacing as requested */
+      margin: 6px 1px;              /* top/bottom breathing + 1px left/right */
+      min-height: var(--card-height);                 /* requested exact height but adjustable via CSS variable */
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-sizing: border-box;
+      overflow: hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content: space-between;
+    }
+
+    /* How to Use card needs the slider to be full-bleed inside the card: remove padding */
+    .card--how { padding:0; }
+
+    /* Other cards have small inner padding but still keep link area bottom aligned */
+    .mobile-card > .card-inner { padding: 20px 10px; display:flex; flex-direction:column; justify-content:space-between; height:100%; box-sizing:border-box; }
+
+    /* Top page name and small description inside the how card */
+    .card-top {
+      padding:8px 10px; /* small padding so text doesn't touch edges */
+      background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0));
+      z-index:10;
+    }
+    .card-top p.page-name { margin:0; font-size:13px; font-weight:700; color:#fff; }
+    .card-top p.page-sub { margin:3px 0 0 0; font-size:11px; color:var(--muted); }
+
+    .mobile-card h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color:#fff;
+      align-self:flex-start;
+    }
+    .card-links { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; }
+    .card-links a {
+      text-decoration: none;         /* remove underline */
+      color: #cbd5e1;
+      font-size: 10px;
+      line-height:1.1;
+    }
+    .how-links a{
+      display:inline-block;
+      font-size: 10px;
+      color:var(--muted);
+      text-decoration:none; /* no underline */
+      border-bottom: none;
+      padding:2px 6px;
+      border-radius:3px;
+      background: rgba(255,255,255,0.01);
+      cursor:default; /* not clickable */
+      -webkit-tap-highlight-color: transparent; /* remove blue tap highlight on mobile */
+    }
+
+    /* ensure clicking doesn't change color to blue (mobile browsers) */
+    .how-links a:visited, .how-links a:active, .how-links a:focus { color:var(--muted); outline:none; }
+
+    /* Center social icons inside the Follow Us card */
+        .social-center { display:flex; align-items:center; justify-content:center; gap:12px; width:100%; height:100%; }
+    .social-center img { width:26px; height:26px; display:block; }
+
+    /* Swiper (How to Use) - full width & height of the card, no left/right padding */
+    .swiper { width:100%; height: calc(var(--card-height) - 44px); /* leave space for top area and pagination + links */ }
+    /* The math above assumes ~44px for top + pagination + links; since card height is adjustable, swiper size adapts */
+    .swiper-wrapper, .swiper-slide { width:100%; height:100%; }
+    .swiper-slide img { width:100%; height:100%; object-fit:cover; display:block; }
+
+
+    /* Copyright: centered below the Follow Us card, not in a card */
+    .copyright {
+      text-align:center;
+      color:var(--muted);
+      font-size:10px;
+      margin-top:8px;
+    }
+
+    /* Hide mobile-card groups on wide screens */
+    @media (min-width:1209px) {
+      .mobile-stack { display:none; }
+      .desktop-footer { display:flex; gap:24px; justify-content:space-between; color:#cbd5e1; }
+      .desktop-footer .col { width:20%; min-width:160px; }
+      .desktop-footer h3 { color:#fff; font-size:18px; margin:0 0 8px 0; }
+      .desktop-footer a { color:#cbd5e1; text-decoration:none; }
+      .desktop-footer a:hover { color:var(--accent); }
+    }
+   .img h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: yellow;
+  display: flex;
+  justify-content: center;  /* centers horizontally */
+  align-items: center;
+}
+
+  </style>
+  
+</head>
+<body>
+<header>
+  <h1>PASS</h1>
+  <div class="top-actions">
+    <!-- import/export show full text on desktop, collapse to icons on small screens -->
+    <button class="btn text" id="importBtn"><span>Import</span></button>
+    <button class="btn text" id="exportBtn"><span>Export</span></button>
+    <button class="btn icon" id="togglePanel" title="Add apps">+</button>
+    
+  </div>
+</header>
+<main>
+  <div class="layout">
+    <div class="cards-area">
+      <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <aside class="side-panel" id="sidePanel" aria-hidden="true">
+      <button class="close-panel-btn" id="closePanelBtn">×</button>
+      <div class="panel-inner">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-weight:600">Add apps</div>
+          <div class="small">Click + to add</div>
+        </div>
+        <div id="availableApps"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<!-- Detail overlay -->
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="detail-card" id="detailCard" role="dialog" aria-modal="true">
+    <div class="detail-top">
+      <img id="detailImg" src="" alt="app">
+      <div>
+        <div class="title" id="detailTitle">App name</div>
+        <div class="small" id="detailSubtitle">Tap inputs to edit (auto saves)</div>
+      </div>
+    </div>
+
+    <div class="fields" id="fieldsContainer"></div>
+    <div class="add-field">
+      <input id="newFieldName" placeholder="Add field name (e.g., username)">
+      <button id="addFieldBtn">Add</button>
+    </div>
+    <button class="copy-all" id="copyAllBtn">Copy all details</button>
+    <div class="detail-actions">
+      <button class="btn ghost" id="closeDetail">Close</button>
+      <button class="btn primary" id="deleteCardBtn">Remove</button>
+    </div>
+  </div>
+</div>
+  <footer class="footer">
+    <!-- MOBILE: only these four cards (How to Use, Contact, About Us, Follow Us) -->
+    <div class="mobile-stack" role="navigation" aria-label="Footer - mobile">
+
+            <!-- 1) About Us (was Important Links) -->
+      <div class="mobile-card" aria-label="About Us">
+        <div class="card-inner">
+          <div><h3>About</h3></div>
+          <div class="card-links" aria-label="about links">
+            <br>
+            <a href="Deploy pass.html">how to deploy</a>
+            <a href="Terms of Service.html">Terms of Service</a>
+            <a href="Privacy policy.html">Privacy Policy</a>
+            <a href="Support.html">Support</a>
+            <a href="Pass FAQ.html">FAQ</a>
+          </div>
+        </div>
+      </div>
+              <!-- 2) Contact (was About Us) - removed call icon -->
+      <div class="mobile-card" aria-label="Contact">
+        <div class="card-inner">
+          <div>
+            <h3>Contact</h3>
+          </div>
+          <div class="card-links" aria-label="contact links">
+            <br>
+<a href="princekumar.webdevloper@gmail.com">Email: Princekumar.webdevloper@gmail.com</a>
+          </div>
+</div>
+      </div>
+<!-- 3) Follow Us (social icons centered) -->
+      <div class="mobile-card" aria-label="Follow Us">
+ <div class="card-inner" style="padding:10%;">
+    <div style="height: 100%; display:flex; align-items:center; justify-content:center;">
+            
+            <div class="social-center" role="list">
+              <a role="listitem" href="#" aria-label="Facebook"><img src="1024px-Facebook_Logo_(2019).png" alt="Facebook"></a>
+              <a role="listitem" href="#" aria-label="Instagram"><img src="pngtree-three-dimensional-instagram-icon-png-image_6618437.png"  alt="Instagram"></a>
+              <a role="listitem" href="#" aria-label="GitHub"><img src="github.png" alt="GitHub"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+</div> <!-- end mobile-stack -->
+ <!-- COPYRIGHT (centered below the Follow Us card, not in a card) -->
+    <div class="copyright">&copy; 2025 Pass. All Rights Reserved.</div>
+</footer>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+</script>
+<script data-name="mainpass.js">
+  /* mainpass.fixed.js
+   Replaces your existing mainpass.js with a hardened, consistent vault implementation.
+   - single canonical vault reference (window.vault)
+   - robust localStorage parsing & fallback seeding
+   - safe DOM lookups (no exceptions if an element is missing)
+   - consistent saveVault that updates both localStorage and window.vault
+   - safer import/export + preload behavior
+*/
+
+(function () {
+  'use strict';
+// --------- Config data ----------//
+      const AVAILABLE_APPS = [
+//------------bank-Upi----------------//
+    { key:"amazon", name:"Amazon Pay", img:"Amazon pay.png", type:"social", presetFields:["Name", "Upi id", "Upi no"] },
+    { key:"bank_indian", name:"Indian Bank", img:"indian-bank-logo-04.png", type:"bank", presetFields:["Account holder Name","Account no","CIF","IFSC",] },
+//----------------end------------------//
+     //-------------------------//
+//---------- Social Apps-------------//
+    { key:"Instagram", name:"Instagram", img:"https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", type:"social", presetFields:["Name","Username","Gmail/Number","Password",] },
+//-------------------------------------//
+{ key:"Facebook", name:"Facebook", img:"https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", type:"social", presetFields:["Name","Username","Gmail/Number","Password",] },
+     //-------------------------------//
+    //-------------------------------//
+  { key:"Tiktok", name:"Tiktok", img:"Tiktok.png", type:"social", presetFields:["Name","Username","Gmail/Number","Password",] },
+  
+   // { key:"", name:"", img:"", type:"social", presetFields:["Name","Username","Gmail/Number","Password",] }, //
+  //-------------End------------------//
+     //---------------------------//
+ //-------------Ecom------------------//
+{ key:"Shopify", name:"Shopify", img:"Shopify.png", type:"ecom", presetFields:["Shop Name","Gmail id","Password","Web address","Product Origin Address"] },
+
+{ key:"shopify Pos", name:"Shopify Pos", img:"Shopify pos.png", type:"ecom", presetFields:["Gmail id","Password","Web address"] },
+
+{ key:"Nihao", name:"Nihao", img:"nihao.png", type:"ecom", presetFields:["Name","Gmail","Password","Address"] },
+
+{ key:"Shiprocket", name:"Shiprocket", img:"shiprocket.png", type:"ecom", presetFields:["Gmail","Number","Password","Address"] },
+//-------------------------------------//
+    //---------------Ai----------------//
+    { key:"api", name:"API key", img:"API.png", type:"network", presetFields:["Name","Api key"] },
+    //------------------------------//
+   { key:"chat gpt", name:"chat gpt", img:"chat gpt .png", type:"network", presetFields:["Name","Gmail","Password","Api key"] }, 
+    //-------------------------------//
+    { key:"Black box ai", name:"black box ai", img:"black box ai .png", type:"network", presetFields:["Name","Gmail","Password","Api key"] },
+    //-------------------------------//
+    { key:"Gemini", name:"Gemini", img:"gemini-google.png", type:"network", presetFields:["Name","Gmail","Password","Api key"] },
+//-------------------------------------//
+    { key:"Gmail", name:"Gmail", img:"Gmail.png", type:"social", presetFields:["Gmail","Password"] },
+//-------------------------------------//
+    { key:"github", name:"Github", img:"github.png", type:"social", presetFields:["Username","Gmail","Password","Repository link-1","Repository link-2"]},
+   //-------------------------------//
+    { key:"GitHub pagess io", name:"Github.io", img:"GitHub pagess io.png", type:"social", presetFields:["Link-1","Link-2","Link-3","Link-4","Link-5","Link-6"] },
+    //-------------------------------//
+    {key:"wifi", name:"Wifi", img:"wifi_PNG62346.png", type:"social", presetFields:["Name","Password"]
+    },
+    //-------------------------------//
+    {key:"Jio pc", name:"Jio Pc", img:"jio 0c.png", type:"social", presetFields:["Name","Password","Gmail","Number"]},
+    //-------------------------------//
+     {key:"Mlbb", name:"Mlbb", img:"new_logo_mobile_legends_bang_bang_2024_png_by_wolvesdzn_dis0mte-fullview.png", type:"social", presetFields:["Name","Gmail"]},
+    //-------------------------------//
+     {key:"Spotify", name:"Spotify", img:"Spotify.jpg", type:"social", presetFields:["Username","Gmail","Password"]},
+    //-------------------------------//
+    {key:"Info", name:"info", img:"info.jpg", type:"social", presetFields:[ ]},
+    //-------------------------------//
+  //-------------------------------//
+  //-------------------------------//
+  //-------------------------------//
+  // { key:"", name:"", img:"", type:"social", presetFields:["Name","Username","Gmail/Number","Password",] }, //
+  //-------------------------------//
+  //-------------------------------//
+  //-------------------------------//
+  //-------------------------------//
+  ];
+  const STORAGE_KEY = "vault_data_v1";
+
+  // ---------- Utilities ----------
+  function uid(prefix = 'id-') { return prefix + Math.random().toString(36).slice(2,9); }
+
+  // Keep one canonical vault array reference on window so other modules can rely on it
+  if (!window.vault || !Array.isArray(window.vault)) {
+    window.vault = [];
+  }
+  const vault = window.vault; // canonical
+
+  // Robust parse localStorage -> returns array or null on irrecoverable parse error
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return null;
+      return parsed;
+    } catch (err) {
+      console.warn('loadFromStorage parse error', err);
+      return null;
+    }
+  }
+
+  // Save vault in-place (keeps the same array reference) and persist to localStorage
+  function saveVault() {
+    try {
+      // ensure all entries have id and fields array
+      for (let i = 0; i < vault.length; i++) {
+        const c = vault[i];
+        if (!c || typeof c !== 'object') vault[i] = { id: uid(), name: 'Unnamed', appKey: 'unknown', img: '', fields: [] };
+        if (!c.id) c.id = uid();
+        if (!Array.isArray(c.fields)) c.fields = [];
+      }
+      // persist
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(vault));
+    } catch (err) {
+      console.error('saveVault failed', err);
+    }
+  }
+
+  // Replace vault contents with another array, but keep same reference object
+  function replaceVaultWith(array) {
+    if (!Array.isArray(array)) array = [];
+    vault.length = 0;
+    array.forEach(i => vault.push(i));
+    saveVault();
+  }
+
+  // Ensure vault has sensible seed items (only if empty or force)
+  function preloadAllAppsUnfilled({ force = false } = {}) {
+    const stored = loadFromStorage();
+    if (!Array.isArray(stored)) {
+      // if storage is invalid, either force seed or seed if vault empty
+      if (!vault.length || force) {
+        const seeded = AVAILABLE_APPS.map(app => ({
+          id: uid(),
+          appKey: app.key,
+          name: app.name,
+          img: app.img || '',
+          fields: (app.presetFields || []).map(k => ({ key: k, value: '' }))
+        }));
+        replaceVaultWith(seeded);
+        return;
+      } else {
+        // leave current vault
+        saveVault();
+        return;
+      }
+    }
+
+    // if storage valid and vault currently empty (first boot), use stored; otherwise merge missing apps
+    if (!vault.length || force) {
+      replaceVaultWith(stored);
+    } else {
+      // merge missing appKeys from AVAILABLE_APPS into existing stored vault (non-destructive)
+      const existingKeys = new Set(vault.map(c => c.appKey));
+      const additions = [];
+      AVAILABLE_APPS.forEach(app => {
+        if (!existingKeys.has(app.key)) {
+          additions.push({
+            id: uid(),
+            appKey: app.key,
+            name: app.name,
+            img: app.img || '',
+            fields: (app.presetFields || []).map(k => ({ key: k, value: '' }))
+          });
+        }
+      });
+      if (additions.length) {
+        additions.forEach(a => vault.push(a));
+        saveVault();
+      }
+    }
+  }
+
+  // Binary helpers used for export/import
+  function toBinary(str) {
+    return Array.from(String(str ?? "")).map(ch => ch.charCodeAt(0).toString(2).padStart(8, "0")).join(" ");
+  }
+  function fromBinary(bin) {
+    if (!bin) return "";
+    return bin.split(" ").filter(Boolean).map(b => String.fromCharCode(parseInt(b, 2))).join("");
+  }
+
+  // ---------- DOM helpers (safe lookups) ----------
+  function $(id) { return document.getElementById(id) || null; }
+  const availableAppsEl = $('availableApps');
+  const cardsGrid = $('cardsGrid');
+  const overlay = $('overlay');
+  const detailTitle = $('detailTitle');
+  const detailImg = $('detailImg');
+  const fieldsContainer = $('fieldsContainer');
+  const newFieldName = $('newFieldName');
+
+  // ---------- Rendering ----------
+  function renderAvailableApps(){
+    if (!availableAppsEl) return;
+    availableAppsEl.innerHTML = "";
+    AVAILABLE_APPS.forEach(app=>{
+      const item = document.createElement("div");
+      item.className = "panel-item";
+      item.innerHTML = `
+        <div class="left">
+          <img src="${app.img}" alt="${escapeHtml(app.name)}">
+          <div><div class="title">${escapeHtml(app.name)}</div>
+          <div class="small">${escapeHtml((app.presetFields||[]).join(", "))}</div></div>
+        </div>
+        <div><button class="add-btn" data-key="${escapeHtml(app.key)}" title="Add">+</button></div>
+      `;
+      availableAppsEl.appendChild(item);
+    });
+
+    availableAppsEl.querySelectorAll(".add-btn").forEach(btn=>{
+      btn.removeEventListener('click', onAddBtnClick);
+      btn.addEventListener("click", onAddBtnClick);
+    });
+  }
+  function onAddBtnClick(e){
+    const key = e.currentTarget.dataset.key;
+    addAppToVault(key);
+  }
+
+  function renderCards() {
+    if (!cardsGrid) return;
+    cardsGrid.innerHTML = "";
+    const MAX_CHARS = 20;
+    // defensive copy
+    const items = Array.isArray(vault) ? vault.slice() : [];
+
+    items.forEach(card => {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.dataset.id = card.id || '';
+      
+      const img = document.createElement("img");
+      img.className = "app-img";
+      img.src = card.img || '';
+      img.alt = card.name || "";
+      
+      const nameEl = document.createElement("div");
+      nameEl.className = "app-name";
+      
+      const name = (card.name || "").trim();
+      const words = name.split(/\s+/).filter(Boolean);
+      if (words.length === 2 && name.length <= MAX_CHARS) {
+        nameEl.textContent = name;
+        nameEl.classList.add('no-break');
+      } else {
+        nameEl.textContent = name;
+      }
+      
+      el.appendChild(img);
+      el.appendChild(nameEl);
+      el.addEventListener("click", () => openDetail(card.id));
+      cardsGrid.appendChild(el);
+    });
+  }
+
+  // ---------- Detail overlay ----------
+  let openedCardId = null;
+
+  function openDetail(id){
+    // perform safe lookup in vault
+    const card = vault.find(c => c && c.id === id);
+    if (!card) {
+      console.warn('openDetail: card not found', id);
+      return;
+    }
+    openedCardId = id;
+    if (detailTitle) detailTitle.textContent = card.name || 'Unnamed';
+    if (detailImg) detailImg.src = card.img || '';
+    renderFields(card);
+    if (overlay) overlay.classList.add("open");
+  }
+  function closeDetail(){
+    openedCardId = null;
+    if (overlay) overlay.classList.remove("open");
+  }
+
+  function renderFields(card){
+    if (!fieldsContainer) return;
+    fieldsContainer.innerHTML = "";
+    if (!Array.isArray(card.fields)) card.fields = [];
+
+    card.fields.forEach((f, idx)=>{
+      const row = document.createElement("div");
+      row.className = "field-row";
+      const input = document.createElement("input");
+      input.value = f.value || "";
+      input.placeholder = f.key || `field ${idx+1}`;
+      input.addEventListener("input",(e)=>{
+        f.value = e.target.value;
+        saveVault();
+      });
+      const copyBtn = document.createElement("button");
+      copyBtn.className = "copy-field";
+      copyBtn.textContent = "Copy";
+      copyBtn.addEventListener("click", ()=>{
+        try { navigator.clipboard.writeText(f.value || ""); } catch(e){ console.warn('copy failed', e); }
+        copyBtn.textContent = "Copied";
+        setTimeout(()=>copyBtn.textContent="Copy",900);
+      });
+      row.appendChild(input);
+      row.appendChild(copyBtn);
+      fieldsContainer.appendChild(row);
+    });
+  }
+
+  // ---------- Add field ----------
+  function handleAddFieldClick(){
+    if (!newFieldName) return alert('UI missing new field input');
+    const name = (newFieldName.value || '').trim();
+    if (!name) return alert("Enter field name");
+    const card = vault.find(c => c && c.id === openedCardId);
+    if (!card) return alert('No card open');
+    if (!Array.isArray(card.fields)) card.fields = [];
+    card.fields.push({ key: name, value: "" });
+    newFieldName.value = "";
+    saveVault();
+    renderFields(card);
+  }
+
+  // ---------- Add app ----------
+  function addAppToVault(key){
+    const preset = AVAILABLE_APPS.find(a=>a.key === key);
+    if(!preset) {
+      console.warn('addAppToVault: preset not found for key', key);
+      return;
+    }
+
+    const countSame = vault.filter(c => c && c.appKey === key).length;
+    if(countSame >= 3){
+      alert(`You can only add up to 3 "${preset.name}" apps.`);
+      return;
+    }
+
+    const newCard = {
+      id: uid(),
+      appKey: preset.key,
+      name: preset.name,
+      img: preset.img || '',
+      fields: (preset.presetFields || []).map(k => ({ key: k, value: "" }))
+    };
+    vault.push(newCard);
+    saveVault();
+    renderCards();
+  }
+
+  // ---------- Delete card ----------
+  function handleDeleteCard(){
+    if (!openedCardId) return;
+    if (!confirm("Delete this card?")) return;
+    const idx = vault.findIndex(c => c && c.id === openedCardId);
+    if (idx >= 0) vault.splice(idx, 1);
+    saveVault();
+    renderCards();
+    closeDetail();
+  }
+
+  // ---------- Import / Export ----------
+  function buildProtocolObject(cards) {
+    return {
+      protocol: "import",
+      authentication: {
+        check: "getpass.json",
+        details: "checkingpass//authentication//getimport/pass=//Aquarius-Prince_kumar{GETIN.JSON}libra@Gorgeous.ipv6"
+      },
+      data: cards.map(c => {
+        return {
+          id: c.id,
+          appKey: toBinary(c.appKey),
+          name: toBinary(c.name),
+          img: toBinary(c.img),
+          fields: (c.fields || []).map(f => ({ key: toBinary(f.key), value: toBinary(f.value) }))
+        };
+      })
+    };
+  }
+
+  function handleExport() {
+    try {
+      if (!vault.length && !confirm("No data found. Export will create empty file. Continue?")) return;
+      const protocol = buildProtocolObject(vault);
+      const text = JSON.stringify(protocol, null, 2);
+      const blob = new Blob([text], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Getpass.json";
+      a.click();
+
+      // clear local storage and vault (intentional in your original; keep optional)
+      localStorage.removeItem(STORAGE_KEY);
+      vault.length = 0;
+      saveVault();
+      renderCards();
+      alert("Export complete. Local data cleared. Keep the Getpass.json safe.");
+    } catch (err) {
+      console.error('export failed', err);
+      alert('Export failed.');
+    }
+  }
+
+  function handleImport() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function() {
+        try {
+          const json = JSON.parse(reader.result);
+          if (json.authentication && json.authentication.check === "getpass.json") {
+            const cards = (json.data || []).map(cc => ({
+              id: cc.id || uid(),
+              appKey: fromBinary(cc.appKey || ""),
+              name: fromBinary(cc.name || "") || "Unnamed",
+              img: fromBinary(cc.img || "") || "",
+              fields: (cc.fields || []).map(f => ({ key: fromBinary(f.key || ""), value: fromBinary(f.value || "") }))
+            }));
+            replaceVaultWith(cards);
+            renderCards();
+            alert("Import successful. Vault restored from file.");
+          } else {
+            alert("Invalid Getpass.json - protocol check failed.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Failed to import. File invalid or corrupted.");
+        }
+      };
+      reader.readAsText(file);
+    };
+    fileInput.click();
+  }
+
+  // ---------- Helpers ----------
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+  }
+
+  // ---------- Wire UI (safe) ----------
+  // Buttons that may or may not exist in DOM
+  const importBtn = $('importBtn');
+  const exportBtn = $('exportBtn');
+  const addFieldBtn = $('addFieldBtn');
+  const closeDetailBtn = $('closeDetail');
+  const deleteCardBtn = $('deleteCardBtn');
+  const togglePanelBtn = $('togglePanel');
+  const sidePanel = $('sidePanel');
+  const closePanelBtn = $('closePanelBtn');
+
+  if (importBtn) importBtn.addEventListener('click', handleImport);
+  if (exportBtn) exportBtn.addEventListener('click', handleExport);
+  if (addFieldBtn) addFieldBtn.addEventListener('click', handleAddFieldClick);
+  if (closeDetailBtn) closeDetailBtn.addEventListener('click', closeDetail);
+  if (deleteCardBtn) deleteCardBtn.addEventListener('click', handleDeleteCard);
+
+  if (togglePanelBtn && sidePanel) {
+    togglePanelBtn.addEventListener('click', ()=> { sidePanel.classList.add('open'); });
+    if (closePanelBtn) closePanelBtn.addEventListener('click', ()=> { sidePanel.classList.remove('open'); });
+    sidePanel.addEventListener('click', (e)=>{ if (e.target === sidePanel) sidePanel.classList.remove('open'); });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', (e)=> { if (e.target === overlay) closeDetail(); });
+  }
+
+  // window beforeunload persistence
+  window.addEventListener("beforeunload", saveVault);
+
+  // Debounced resize -> rerender cards (keeps behavior)
+  (function() {
+    let t = null;
+    function onResize() {
+      clearTimeout(t);
+      t = setTimeout(() => { renderCards(); }, 120);
+    }
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+  })();
+
+  // ---------- Boot (initialize vault safely) ----------
+  (function boot() {
+    // Try to recover a saved vault
+    const stored = loadFromStorage();
+    if (Array.isArray(stored) && stored.length) {
+      // load into the canonical vault reference (preserve object)
+      replaceVaultWith(stored);
+    } else {
+      // seed from AVAILABLE_APPS if needed
+      preloadAllAppsUnfilled({ force: false });
+    }
+
+    // render UI if elements present
+    renderAvailableApps();
+    renderCards();
+  })();
+
+  // Expose API (helpful for protection module)
+  window.mainpass = {
+    saveVault,
+    preloadAllAppsUnfilled,
+    buildProtocolObject,
+    toBinary,
+    fromBinary,
+    replaceVaultWith,
+    readRawVault: () => vault
+  };
+})(); // end mainpass.fixed.js
+</script>
+<script data-name="longpress-blocked.js">
+(function () {
+  let longPressTimer = null;
+  const LONG_PRESS_TIME = 500; // ms
+
+  // Block right click
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  // Block text selection & copy
+  document.addEventListener("selectstart", e => e.preventDefault());
+  document.addEventListener("copy", e => e.preventDefault());
+  document.addEventListener("cut", e => e.preventDefault());
+
+  // Long-press detection (mobile)
+  document.addEventListener("touchstart", function (e) {
+    // Allow form elements & buttons
+    const tag = e.target.tagName;
+    if (["INPUT", "TEXTAREA", "BUTTON", "SELECT", "A"].includes(tag)) return;
+
+    longPressTimer = setTimeout(() => {
+      e.preventDefault();
+    }, LONG_PRESS_TIME);
+  }, { passive: true });
+
+  document.addEventListener("touchend", () => {
+    clearTimeout(longPressTimer);
+  });
+
+  document.addEventListener("touchmove", () => {
+    clearTimeout(longPressTimer);
+  });
+
+  // Block image drag
+  document.addEventListener("dragstart", e => {
+    if (e.target.tagName === "IMG") {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+<script data-name="tap-highlights block ed.js">
+(function () {
+  const style = document.createElement("style");
+  style.textContent = `
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+</script>
+</body>
+</html>

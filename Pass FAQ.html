@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - JioPC</title>
+    <style>
+        @font-face {
+            font-family: JioTypeBlack;
+            src: url("./assets/fonts/JioType-Black_0.woff2") format("woff2");
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: JioTypeBold;
+            src: url("./assets/fonts/JioType-Bold_0.woff2") format("woff2");
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: JioTypeMedium;
+            src: url("./assets/fonts/JioType-Medium_0.woff2") format("woff2");
+            font-display: swap;
+        }
+
+        :root {
+            height: max-content;
+            --background-color: #141414;
+            --accordion-bg-color: #2B2B2B;
+            --accordion-text-color: #FFFFFF;
+            --accordion-border-color: #5A5A5A;
+            --search-bg-color: #2B2B2B;
+            --search-text-color: #FFFFFFC7;
+            --font-size: 9px;
+            --font-line-height: 12px;
+            --heading-font-size: 20px;
+            --margin: 0.5rem;
+            --padding: 0.5rem;
+            --font-size-help-head: 11px;
+            --font-size-help-subhead: 9px;
+            --help-container: 57px;
+            --svg-width-height: 12px;
+            --container-height:calc(100vh);
+            --scale-factor: 0.5;
+            overflow-y:auto ;
+        }
+
+        .native svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        body {
+            margin: var(--margin);
+            background: var(--background-color);
+        }
+
+        .FAQ-section-wrapper {
+            min-height: fit-content;
+            width: 100%;
+            background: radial-gradient(circle at 50% 10%, #06394d 40%, #072939 70%);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .FAQ-section-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5rem;
+            max-width: 1240px;
+            width: 100%;
+            margin: var(--margin) auto;
+            padding: 0;
+        }
+
+        .FAQ-section-heading {
+            font-family: 'JioTypeBlack';
+            font-weight: 900;
+            font-size: var(--heading-font-size);
+            line-height: var(--heading-font-size);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .FAQ-section-questions-wrapper {
+            background: var(--accordion-bg-color);
+            border-radius: 1rem;
+            padding: var(--padding);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .FAQ-section-search-data-wrapper {
+            background: #ffff;
+            border-radius: 1rem;
+            padding: 1rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            box-shadow: 0px 4px 16px #00000014;
+        }
+
+        .FAQ-section-questions-container {
+            width: 100%;
+            border-bottom: 1px solid var(--accordion-border-color);
+        }
+
+        .FAQ-section-questions-container:last-child {
+            border: none;
+        }
+
+        .FAQ-section-questions-heading {
+            font-family: 'JioTypeBold';
+            font-weight: 700;
+            font-size: var(--font-size);
+            line-height: var(--font-line-height);
+            margin: var(--margin) 0;
+            color: var(--accordion-text-color);
+            width: 90%;
+        }
+
+        .FAQ-section-question-subheading {
+            font-family: 'JioTypeMedium';
+            font-weight: 500;
+            font-size: var(--font-size);
+            line-height: var(--font-line-height);
+            margin-bottom: var(--margin);
+            color: var(--accordion-text-color);
+            opacity: 0.6;
+            padding-left: 1rem;
+        }
+
+        .FAQ-section-question-subheading b {
+            opacity: 0.9;
+        }
+
+        .FAQ-section-questions-header-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .FAQ-section-questions-header-wrapper svg:focus,
+.FAQ-section-questions-header-wrapper svg:focus-visible {
+    outline: none; 
+}
+          .FAQ-section-question-subheading li {
+      margin: 0.25rem 0; /* Space between list items */
+      color: var(--accordion-text-color);
+    
+  }.FAQ-section-question-subheading div {
+      margin: 0;
+      padding: 0;
+  }
+          .FAQ-section-question-subheading ul,
+  .FAQ-section-question-subheading ol {
+      margin: 0;
+      padding-left: 1.5rem; /* Consistent indent for lists */
+      list-style-position: outside;
+  }
+        .input-container {
+            border: 1px solid #B5B5B5;
+            border-radius: 25px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: var(--padding);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--search-bg-color);
+        }
+
+        #search-input {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            border: none;
+            font-family: 'JioTypeBold';
+            font-weight: 500;
+            font-size: var(--font-size);
+            line-height: var(--font-line-height);
+            background: transparent;
+            color: var(--search-text-color);
+        }
+
+        .no-results-found-text {
+            font-family: 'JioTypeBold';
+            font-size: var(--font-size);
+            line-height: var(--font-line-height);
+            font-weight: 700;
+            margin: var(--margin) auto;
+            color: var(--accordion-text-color);
+        }
+
+        .search-data-container {
+            width: 100%;
+            background: #Ffff;
+        }
+
+
+        .FAQ-section-search-text-heading {
+            font-family: 'JioTypeBold';
+            font-weight: 700;
+            font-size: var(--font-size);
+            line-height: var(---font-line-height);
+            margin: 0.5rem 0;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .visible {
+            display: unset;
+        }
+
+        .search-header-text {
+            font-family: 'JioTypeMedium';
+            font-weight: 500;
+            font-size: var(--font-size);
+            line-height: var(--font-line-height);
+            opacity: 0.5;
+            color: var(--search-text-color);
+        }
+
+        .FAQ-section-search-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.7rem 0;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            margin-right: 0.1rem;
+            outline: none;
+            border: none !important;
+            cursor: pointer;
+        }
+
+        svg {
+            cursor: pointer;
+            width: var(--svg-width-height);
+            height: var(--svg-width-height);
+        }
+
+        path {
+            fill: var(--accordion-text-color);
+        }
+        .faq_main_parent{
+          width: 100%;
+          overflow: auto;
+          border-radius: 1rem;
+          
+        }
+        .faq_main_parent::-webkit-scrollbar{
+          display: none;
+        }
+        .contact-parent{
+          width: 100%;
+          background-color: #2B2B2B;
+          height: var(--help-container);
+          border-radius: 1rem;
+          margin: 20px auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+         
+        }
+        .help_head{
+          font-family: 'JioTypeMedium';
+          font-weight: bolder;
+          color: #FCE2B2;
+          font-size: var(--font-size-help-head);
+          padding: 0px 24px;
+          margin-bottom: 5px;
+        }
+        .help_subhead{
+          font-family: 'JioTypeMedium';
+          padding: 0px 24px;
+          color: #FFFFFF;
+          font-size:var(--font-size-help-subhead);
+          margin-bottom: 0.1rem;
+        }
+    </style>
+    <script>
+        (() => {
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+
+            const bgColor = params.get('bgColor');
+            const accordionBGColor = params.get('accordionBGColor');
+            const accordionTextColor = params.get('accordionTextColor');
+            const accordionBorderColor = params.get('accordionBorderColor');
+            const searchBGColor = params.get('searchBGColor')
+            const searchTextColor = params.get('searchTextColor')
+            const isNative = params.get('isNative');
+
+            if (isNative === 'false') { 
+                document.documentElement.style.setProperty("--scale-factor", "0.5");
+                document.documentElement.style.setProperty("--font-size", "18px");
+                document.documentElement.style.setProperty("--font-line-height", "24px");
+                document.documentElement.style.setProperty("--heading-font-size", "40px");
+                document.documentElement.style.setProperty("--font-size-help-head", "22px");
+                document.documentElement.style.setProperty("--help-container", "115px");
+                document.documentElement.style.setProperty("--font-size-help-subhead", "18px");
+                document.documentElement.style.setProperty("--container-height", "calc(100vh - 270px)");
+                document.documentElement.style.setProperty("--margin", "1rem");
+                document.documentElement.style.setProperty("--padding", "1rem");
+                document.documentElement.style.setProperty("--svg-width-height", "unset");
+            }
+            if (bgColor !== null) {
+                document.documentElement.style.setProperty("--background-color", bgColor);
+            }
+            if (accordionBGColor !== null) {
+                document.documentElement.style.setProperty("--accordion-bg-color", accordionBGColor)
+            }
+            if (accordionTextColor !== null) {
+                document.documentElement.style.setProperty("--accordion-text-color", accordionTextColor)
+            }
+            if (accordionBorderColor !== null) {
+                document.documentElement.style.setProperty("--accordion-border-color", accordionBorderColor)
+            }
+            if (searchBGColor !== null) {
+                document.documentElement.style.setProperty("--search-bg-color", searchBGColor)
+            }
+            if (searchTextColor !== null) {
+                document.documentElement.style.setProperty("--search-text-color", searchTextColor)
+            }
+        })();
+
+    </script>
+</head>
+
+<body>
+    <div class="input-container">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M10.0042 2.00001C11.3025 2.0014 12.5748 2.36381 13.679 3.04676C14.7831 3.7297 15.6756 4.70625 16.2566 5.86727C16.8376 7.02829 17.0843 8.32801 16.9691 9.62118C16.8539 10.9143 16.3813 12.15 15.6042 13.19L21.7142 19.29C21.8079 19.383 21.8823 19.4936 21.9331 19.6154C21.9839 19.7373 22.01 19.868 22.01 20C22.01 20.132 21.9839 20.2627 21.9331 20.3846C21.8823 20.5064 21.8079 20.617 21.7142 20.71C21.6212 20.8037 21.5106 20.8781 21.3888 20.9289C21.2669 20.9797 21.1362 21.0058 21.0042 21.0058C20.8722 21.0058 20.7415 20.9797 20.6196 20.9289C20.4978 20.8781 20.3872 20.8037 20.2942 20.71L14.1942 14.6C13.3065 15.2658 12.2733 15.7109 11.1798 15.8989C10.0862 16.0868 8.96365 16.0121 7.90466 15.6808C6.84566 15.3496 5.88057 14.7714 5.08899 13.9939C4.2974 13.2163 3.70199 12.2617 3.35186 11.2088C3.00173 10.156 2.90691 9.03491 3.07523 7.93816C3.24354 6.84142 3.67016 5.8004 4.31991 4.90095C4.96966 4.0015 5.82392 3.2694 6.81224 2.76502C7.80056 2.26064 8.89463 1.99842 10.0042 2.00001ZM10.0042 14C10.9931 14 11.9598 13.7068 12.7821 13.1574C13.6043 12.6079 14.2452 11.8271 14.6236 10.9134C15.002 9.99979 15.1011 8.99446 14.9081 8.02456C14.7152 7.05465 14.239 6.16374 13.5397 5.46447C12.8405 4.76521 11.9496 4.28901 10.9797 4.09608C10.0098 3.90315 9.00442 4.00217 8.09079 4.38061C7.17716 4.75905 6.39627 5.39991 5.84686 6.22216C5.29745 7.0444 5.00421 8.0111 5.00421 9.00001C5.00421 9.65662 5.13354 10.3068 5.38481 10.9134C5.63609 11.5201 6.00438 12.0712 6.46868 12.5355C6.93297 12.9998 7.48417 13.3681 8.09079 13.6194C8.69742 13.8707 9.3476 14 10.0042 14Z"
+                fill="black" />
+        </svg>
+        <input type="text" placeholder="Search in FAQs" id="search-input" oninput="handleSearch(event)" />
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="close-icon hide">
+            <path
+                d="M10 0C8.02219 0 6.08879 0.58649 4.4443 1.6853C2.79981 2.78412 1.51809 4.3459 0.761209 6.17317C0.00433284 8.00043 -0.193701 10.0111 0.192152 11.9509C0.578004 13.8907 1.53041 15.6725 2.92894 17.0711C4.32746 18.4696 6.10929 19.422 8.0491 19.8079C9.98891 20.1937 11.9996 19.9957 13.8268 19.2388C15.6541 18.4819 17.2159 17.2002 18.3147 15.5557C19.4135 13.9112 20 11.9778 20 10C20 8.68678 19.7413 7.38642 19.2388 6.17317C18.7363 4.95991 17.9997 3.85752 17.0711 2.92893C16.1425 2.00035 15.0401 1.26375 13.8268 0.761205C12.6136 0.258658 11.3132 0 10 0ZM13.71 12.29C13.8037 12.383 13.8781 12.4936 13.9289 12.6154C13.9797 12.7373 14.0058 12.868 14.0058 13C14.0058 13.132 13.9797 13.2627 13.9289 13.3846C13.8781 13.5064 13.8037 13.617 13.71 13.71C13.617 13.8037 13.5064 13.8781 13.3846 13.9289C13.2627 13.9797 13.132 14.0058 13 14.0058C12.868 14.0058 12.7373 13.9797 12.6154 13.9289C12.4936 13.8781 12.383 13.8037 12.29 13.71L10 11.41L7.71 13.71C7.61704 13.8037 7.50644 13.8781 7.38458 13.9289C7.26272 13.9797 7.13202 14.0058 7 14.0058C6.86799 14.0058 6.73729 13.9797 6.61543 13.9289C6.49357 13.8781 6.38297 13.8037 6.29 13.71C6.19628 13.617 6.12188 13.5064 6.07111 13.3846C6.02034 13.2627 5.99421 13.132 5.99421 13C5.99421 12.868 6.02034 12.7373 6.07111 12.6154C6.12188 12.4936 6.19628 12.383 6.29 12.29L8.59 10L6.29 7.71C6.1017 7.5217 5.99591 7.2663 5.99591 7C5.99591 6.7337 6.1017 6.4783 6.29 6.29C6.47831 6.1017 6.7337 5.99591 7 5.99591C7.26631 5.99591 7.5217 6.1017 7.71 6.29L10 8.59L12.29 6.29C12.4783 6.1017 12.7337 5.99591 13 5.99591C13.2663 5.99591 13.5217 6.1017 13.71 6.29C13.8983 6.4783 14.0041 6.7337 14.0041 7C14.0041 7.2663 13.8983 7.5217 13.71 7.71L11.41 10L13.71 12.29Z"
+                fill="black" />
+        </svg>
+
+    </div>
+    <div class="faq_main_parent">
+        <div class="FAQ-section-questions-wrapper" id="faq-wrapper"></div>
+        <div class="FAQ-section-search-data-wrapper hide" id="search-wrapper"></div>
+    </div>
+
+
+    <script>
+        let focusedIndex = undefined;
+let FAQData= 
+[
+  {
+    "heading": "What is PASS – Password Manager?",
+    "subheading": "PASS is a privacy-first, offline password and credential manager web app. It allows users to securely store usernames, passwords, bank details, API keys, passkeys, and private notes directly in their browser without using cloud servers, accounts, or tracking systems. PASS is designed to give full ownership and control of credentials to the user.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "How does PASS actually work?",
+    "subheading": "PASS runs entirely inside your browser and uses the browser’s local storage to save all credentials. When you add an app and enter your data, it is saved locally on your device. No information is transmitted over the internet, and no backend database is involved. Once the app loads, it can operate fully offline.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Does PASS collect any personal data?",
+    "subheading": "No. PASS does not collect, track, transmit, analyze, or store any personal information. There is no registration system, no login requirement, no analytics, no cookies for tracking, and no third-party integrations. The developers cannot see or access your credentials.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Where are my credentials stored?",
+    "subheading": "All credentials are stored inside your browser’s local storage on your device. They remain there until you manually update, delete, export, or clear them. The data never leaves your device automatically.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Is PASS connected to any cloud or server?",
+    "subheading": "No. PASS does not use cloud infrastructure, remote servers, online databases, or sync systems. It is a fully local-only system. This eliminates risks related to server breaches, cloud leaks, or external hacking attempts.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "How do I use PASS?",
+    "subheading": "Open PASS in your browser, add a new app or service, choose the type (Social, Bank, API, Custom, etc.), and enter your credentials such as username, password, passkey, or custom fields. You can edit, update, copy manually, or delete entries anytime. All data remains saved locally until you change or remove it.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "How does the Export feature work?",
+    "subheading": "When you use Export, PASS generates a structured JSON file containing all saved credentials. This file is created directly on your device and downloaded to your storage. It is not uploaded anywhere. Export is recommended before clearing browser cache, resetting your device, or switching browsers.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "How does the Import feature work?",
+    "subheading": "Import allows you to restore previously exported data. You select the JSON backup file from your device, and PASS loads all credentials back into browser storage. The process is fully manual and happens locally on your device.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "What happens if I clear my browser data without exporting?",
+    "subheading": "If browser storage is cleared without exporting first, all stored credentials may be permanently lost. Since PASS has no server or recovery system, data cannot be restored without a backup file.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Can PASS recover my lost credentials?",
+    "subheading": "No. PASS does not provide account recovery, password reset, cloud backup, or remote restoration. All responsibility for backups and exports lies with the user.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Is PASS secure against online attacks?",
+    "subheading": "Because PASS does not transmit data over the internet or store information on servers, it significantly reduces exposure to remote breaches and cloud leaks. However, overall security also depends on your device security, browser safety, and protection of exported files.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Does PASS use analytics, ads, or tracking tools?",
+    "subheading": "No. PASS does not use advertising networks, tracking scripts, analytics tools, social media integrations, or hidden background requests. It is built purely for local credential management.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Can I use PASS on multiple devices?",
+    "subheading": "Yes, but data does not sync automatically. To use PASS on another device, you must export your credentials from the first device and import the JSON file into the second device manually.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "What type of information can I store?",
+    "subheading": "You can store usernames, passwords, passkeys, bank details, API keys, secure notes, and custom fields. PASS supports multiple account types and structured entries for better organization.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Who is responsible for data security?",
+    "subheading": "Since PASS is self-managed and offline, users are fully responsible for device security, exporting backups, protecting exported files, and managing browser storage carefully.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "What makes PASS different from traditional password managers?",
+    "subheading": "Unlike cloud-based password managers, PASS does not require login, does not sync to servers, does not collect data, and does not depend on subscriptions. It focuses on simplicity, offline operation, and full user ownership.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Can PASS be terminated or stopped?",
+    "subheading": "Yes. Since there are no accounts or servers, stopping PASS simply means clearing the app or browser storage. You have full control over when and how to stop using it.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "Is PASS suitable for shared or temporary devices?",
+    "subheading": "Yes, if used carefully. After exporting your data, you may clear local storage to remove credentials. This makes PASS usable on shared systems when managed responsibly.",
+    "expanded": false,
+    "html": false
+  },
+  {
+    "heading": "What is the core principle behind PASS?",
+    "subheading": "The core principle of PASS is complete user ownership. No cloud dependency, no data collection, no third-party access. Your data remains in your hands at all times.",
+    "expanded": false,
+    "html": false
+  }
+];
+  
+        // code to check if extrnal keyboard is connected or not
+        if (navigator.keyboard) {
+            navigator.keyboard.getLayoutMap().then((layout) => {
+                console.log("Exntrnal keyboard is detected", layout)
+                document.getElementById("search-input").blur();
+            });
+        } else {
+            console.log("Keyboard API not supported in this browser");
+        }
+
+
+        // Image URLs for expand and collapse icons
+        const searchImg = './images/search_light.svg';
+        let filteredFAQData = [...FAQData];
+        let searchedData = []
+
+        const faqWrapper = document.getElementById('faq-wrapper');
+
+        function toggleExpanded(faqData, index) {
+            faqData[index].expanded = !faqData[index].expanded;
+            renderFAQs(); // Re-render the FAQ section
+
+            if (focusedIndex !== undefined) {
+                const updatedElement = document.querySelector(`[data-index="${focusedIndex}"]`);
+                updatedElement?.focus();
+            }
+        }
+
+        // Helper functions for style management
+        const updateInputContainerStyle = (inputContainer, isSearching) => {
+            // inputContainer.style.background = isSearching ? '#F5F5F5' : 'var(--search-bg-color)';
+            // inputContainer.style.border = isSearching ? 'none' : '1px solid #B5B5B5';
+        };
+
+        const showSelectedSearchResult = (data) => {
+            const faqWrapper = document.getElementById('faq-wrapper');
+            const searchWrapper = document.getElementById('search-wrapper')
+            const searchInputValue = document.getElementById('search-input')
+            searchWrapper.classList.add('hide');
+            searchWrapper.classList.remove('visible');
+            filteredFAQData = [{
+                ...data
+            }]
+            searchInputValue.value = data.heading
+            renderFAQData(faqWrapper, filteredFAQData);
+        }
+
+        // Render the search results
+        const renderSearchResults = (searchWrapper, searchedData) => {
+            searchWrapper.innerHTML = ''; // Clear existing content
+            if (searchedData?.length) {
+                searchWrapper.classList.add('visible');
+                searchWrapper.classList.remove('hide');
+                searchedData.forEach(item => {
+                    const container = document.createElement('div');
+                    container.className = 'search-data-container';
+
+                    const headerWrapper = document.createElement('div');
+                    headerWrapper.className = 'FAQ-section-search-wrapper';
+                    headerWrapper.onclick = () => showSelectedSearchResult(item)
+
+                    const icon = document.createElement('img');
+                    icon.src = searchImg;
+                    icon.alt = 'search-icon';
+                    icon.style.width = '24px';
+                    icon.loading = 'lazy';
+
+                    const heading = document.createElement('div');
+                    heading.className = 'search-header-text';
+                    heading.textContent = item.heading;
+
+                    headerWrapper.appendChild(icon);
+                    headerWrapper.appendChild(heading);
+                    container.appendChild(headerWrapper);
+                    searchWrapper.appendChild(container);
+                });
+            } else {
+                searchWrapper.classList.remove('visible');
+                searchWrapper.classList.add('hide');
+            }
+        };
+
+        // Render FAQ data
+        const renderFAQData = (faqWrapper, faqData) => {
+            faqWrapper.innerHTML = ''; // Clear existing content
+            if (faqData?.length) {
+                faqData.forEach((item, index) => {
+                    const container = document.createElement('div');
+                    container.className = 'FAQ-section-questions-container';
+
+                    const headerWrapper = document.createElement('div');
+                    headerWrapper.className = 'FAQ-section-questions-header-wrapper';
+
+                    const heading = document.createElement('div');
+                    heading.className = 'FAQ-section-questions-heading';
+                    heading.textContent = item.heading;
+
+                    const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    icon.tabIndex = 0
+                    icon.setAttribute("data-index", index);
+                    icon.onclick = () => {
+                        const focusedElement = document.activeElement;
+                        focusedIndex = focusedElement?.getAttribute("data-index");
+                        toggleExpanded(faqData, index);
+                    }
+                    icon.addEventListener('keydown', (event) => {
+                        switch (event.key) {
+                            case 'Enter':
+                                const focusedElement = document.activeElement;
+                                focusedIndex = focusedElement?.getAttribute("data-index");
+                                toggleExpanded(faqData, index);
+                                break;
+                        }
+                    })
+
+                    icon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+                    icon.setAttribute("viewBox", "0 0 20 20");
+                    icon.setAttribute("width", "24");
+                    icon.setAttribute("height", "24");
+                    icon.setAttribute("fill", "none");
+
+                    // Create the <path> element for the SVG
+                    const pathExpanded = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathExpanded.tabIndex = 0
+                    pathExpanded.setAttribute(
+                        "d",
+                        "M10 0C8.02219 0 6.08879 0.58649 4.4443 1.6853C2.79981 2.78412 1.51809 4.3459 0.761209 6.17317C0.00433284 8.00043 -0.193701 10.0111 0.192152 11.9509C0.578004 13.8907 1.53041 15.6725 2.92894 17.0711C4.32746 18.4696 6.10929 19.422 8.0491 19.8079C9.98891 20.1937 11.9996 19.9957 13.8268 19.2388C15.6541 18.4819 17.2159 17.2002 18.3147 15.5557C19.4135 13.9112 20 11.9778 20 10C20 8.68678 19.7413 7.38642 19.2388 6.17317C18.7363 4.95991 17.9997 3.85752 17.0711 2.92893C16.1425 2.00035 15.0401 1.26375 13.8268 0.761205C12.6136 0.258658 11.3132 0 10 0ZM14 11H6C5.73479 11 5.48043 10.8946 5.2929 10.7071C5.10536 10.5196 5 10.2652 5 10C5 9.73478 5.10536 9.48043 5.2929 9.29289C5.48043 9.10536 5.73479 9 6 9H14C14.2652 9 14.5196 9.10536 14.7071 9.29289C14.8946 9.48043 15 9.73478 15 10C15 10.2652 14.8946 10.5196 14.7071 10.7071C14.5196 10.8946 14.2652 11 14 11Z"
+                    );
+                    pathExpanded.setAttribute("fill", 'black');
+                    pathExpanded.setAttribute("id", "toggleButton");
+
+                    const pathClosed = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathClosed.setAttribute(
+                        "d",
+                        "M10 0C8.02219 0 6.08879 0.58649 4.4443 1.6853C2.79981 2.78412 1.51809 4.3459 0.761209 6.17317C0.00433284 8.00043 -0.193701 10.0111 0.192152 11.9509C0.578004 13.8907 1.53041 15.6725 2.92894 17.0711C4.32746 18.4696 6.10929 19.422 8.0491 19.8079C9.98891 20.1937 11.9996 19.9957 13.8268 19.2388C15.6541 18.4819 17.2159 17.2002 18.3147 15.5557C19.4135 13.9112 20 11.9778 20 10C20 8.68678 19.7413 7.38642 19.2388 6.17317C18.7363 4.95991 17.9997 3.85752 17.0711 2.92893C16.1425 2.00035 15.0401 1.26375 13.8268 0.761205C12.6136 0.258658 11.3132 0 10 0ZM14 11H11V14C11 14.2652 10.8946 14.5196 10.7071 14.7071C10.5196 14.8946 10.2652 15 10 15C9.73479 15 9.48043 14.8946 9.2929 14.7071C9.10536 14.5196 9 14.2652 9 14V11H6C5.73479 11 5.48043 10.8946 5.2929 10.7071C5.10536 10.5196 5 10.2652 5 10C5 9.73478 5.10536 9.48043 5.2929 9.29289C5.48043 9.10536 5.73479 9 6 9H9V6C9 5.73478 9.10536 5.48043 9.2929 5.29289C9.48043 5.10536 9.73479 5 10 5C10.2652 5 10.5196 5.10536 10.7071 5.29289C10.8946 5.48043 11 5.73478 11 6V9H14C14.2652 9 14.5196 9.10536 14.7071 9.29289C14.8946 9.48043 15 9.73478 15 10C15 10.2652 14.8946 10.5196 14.7071 10.7071C14.5196 10.8946 14.2652 11 14 11Z"
+                    );
+                    pathClosed.setAttribute("fill", "black");
+                    pathClosed.setAttribute("id", "toggleButton");
+
+                    // Append the path to the SVG
+                    icon.appendChild(item.expanded ? pathExpanded : pathClosed);
+
+                    headerWrapper.appendChild(heading);
+                    headerWrapper.appendChild(icon);
+                    container.appendChild(headerWrapper);
+
+                    if (item.expanded) {
+                        const subheading = document.createElement('div');
+                        subheading.className = 'FAQ-section-question-subheading';
+                        if (item.html) {
+                            subheading.innerHTML = item.subheading;
+                        } else {
+                            subheading.textContent = item.subheading;
+                        }
+                        container.appendChild(subheading);
+                    }
+
+                    faqWrapper.appendChild(container);
+                });
+            } else {
+                const noDataText = document.createElement('div');
+                noDataText.textContent = 'No results found';
+                noDataText.className = 'no-results-found-text';
+                faqWrapper.appendChild(noDataText);
+            }
+        };
+
+        // Main render function
+        const renderFAQs = (searchedData) => {
+            const faqWrapper = document.getElementById('faq-wrapper');
+            const searchWrapper = document.getElementById('search-wrapper');
+
+            // renderSearchResults(searchWrapper, searchedData);
+            renderFAQData(faqWrapper, filteredFAQData);
+        };
+
+        const removeInput = (closeBtn) => {
+            const inputField = document.getElementById('search-input')
+            inputField.value = ''
+            searchedData = [];
+            filteredFAQData = [...FAQData];
+            closeBtn.classList.remove('visible')
+            closeBtn.classList.add('hide')
+            renderFAQs(searchedData)
+            const inputContainer = document.querySelector('.input-container');
+            updateInputContainerStyle(inputContainer, false);
+        }
+
+        // Event handler for search
+        function handleSearch(event) {
+        
+            const inputContainer = document.querySelector('.input-container');
+            const closeBtn = document.querySelector('.close-icon')
+            closeBtn.onclick = () => removeInput(closeBtn)
+            const query = event.target.value.toLowerCase();
+
+            searchedData = [];
+            if (query?.length) {
+                searchedData = FAQData.filter(item =>
+                    item.heading.toLowerCase().includes(query)
+                );
+                filteredFAQData = [...searchedData];
+                updateInputContainerStyle(inputContainer, true);
+                closeBtn.classList.remove('hide')
+                closeBtn.classList.add('visible')
+            } else {
+                searchedData = [];
+                filteredFAQData = [...FAQData];
+                updateInputContainerStyle(inputContainer, false);
+                closeBtn.classList.remove('visible')
+                closeBtn.classList.add('hide')
+            }
+
+            renderFAQs(searchedData); // Re-render the FAQs
+        }
+
+        // Handle Enter key press
+        const handleSearchText = (e) => {
+            if (e.key === 'Enter') {
+                filteredFAQData = searchedData;
+                renderFAQs();
+            }
+        };
+
+        // Initialize event listeners
+        // const initEventListeners = () => {
+        //     const inputContainer = document.querySelector('.input-container');
+        //     inputContainer.addEventListener('keydown', handleSearchText);
+        // };
+
+        // Initialization
+        // initEventListeners();
+        renderFAQs();
+    </script>
+</body>
+
+</html>

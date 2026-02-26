@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terms of Service</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="android chrome.jpg">
+    <style data-name="main style">
+  :root{
+    --bg:#0b0f14;
+    --panel:#0f1720;
+    --card:#111922;
+    --muted:#9ca3af;
+    --accent:#1d4ed8;
+    --gap:12px;
+    --radius:12px;
+    --card-min-height:clamp(90px, 18vh, 160px);
+    --card-img-size:clamp(40px, 8vw, 64px);
+    --header-height:50px;
+  }
+  
+  *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    padding:env(safe-area-inset-top) 12px 24px;
+  }
+  
+</style>
+  <style data-name="Footer">
+  /* Footer Styles */
+/* ---------- Force footer full-bleed and remove card side gaps ---------- */
+/* Place this AFTER existing footer CSS so it overrides earlier rules */
+
+.footer {
+  position: relative;        /* allow left/right positioning */
+  left: 50%;
+  right: 50%;
+  width: 100vw;              /* full viewport width */
+  transform: translateX(-50%); /* center it exactly */
+  box-sizing: border-box;
+  padding-left: env(safe-area-inset-left, 12px);   /* preserve notch-safe inset fallback */
+  padding-right: env(safe-area-inset-right, 12px); /* fallback to 12px if env not present */
+  background: var(--bg);     /* keep your background */
+  z-index: 5;
+}
+
+/* keep an inner constraint so desktop-footer remains centered within max width */
+.footer .footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-top: 12px; /* keep your spacing */
+}
+
+/* Remove unwanted tiny left/right margins on mobile cards and make them span inner width */
+.mobile-stack { padding-left: 0; padding-right: 0; }
+.mobile-card {
+  width: 100%;
+  margin: 6px 0;            /* remove side margins */
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* If you had explicit margins on .mobile-card via inline style, ensure they are overridden */
+.mobile-card[style] { margin-left: 0 !important; margin-right: 0 !important; }
+
+/* Keep copyright & desktop-footer aligned inside the inner wrapper */
+.footer .copyright,
+.footer .desktop-footer {
+  max-width: 1200px;
+  margin: 18px auto 0;
+  box-sizing: border-box;
+}
+
+/* When on very small screens, reduce the horizontal safe-area fallback */
+@media (max-width:600px){
+  .footer { padding-left: env(safe-area-inset-left, 10px); padding-right: env(safe-area-inset-right, 10px); }
+}
+
+
+    /* ---------- MOBILE CARDS (the only four containers) ---------- */
+    .mobile-stack { display:block; max-width:100%; margin: auto; }
+
+    .mobile-card {
+      width: calc(100% - 2px);      /* 1px left + 1px right spacing as requested */
+      margin: 6px 1px;              /* top/bottom breathing + 1px left/right */
+      min-height: var(--card-height);                 /* requested exact height but adjustable via CSS variable */
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-sizing: border-box;
+      overflow: hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content: space-between;
+    }
+
+    /* How to Use card needs the slider to be full-bleed inside the card: remove padding */
+    .card--how { padding:0; }
+
+    /* Other cards have small inner padding but still keep link area bottom aligned */
+    .mobile-card > .card-inner { padding: 20px 10px; display:flex; flex-direction:column; justify-content:space-between; height:100%; box-sizing:border-box; }
+
+    /* Top page name and small description inside the how card */
+    .card-top {
+      padding:8px 10px; /* small padding so text doesn't touch edges */
+      background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0));
+      z-index:10;
+    }
+    .card-top p.page-name { margin:0; font-size:13px; font-weight:700; color:#fff; }
+    .card-top p.page-sub { margin:3px 0 0 0; font-size:11px; color:var(--muted); }
+
+    .mobile-card h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color:#fff;
+      align-self:flex-start;
+    }
+    .card-links { display:flex; flex-direction:column; gap:6px; margin:0; padding:0; }
+    .card-links a {
+      text-decoration: none;         /* remove underline */
+      color: #cbd5e1;
+      font-size: 10px;
+      line-height:1.1;
+    }
+    .how-links a{
+      display:inline-block;
+      font-size: 10px;
+      color:var(--muted);
+      text-decoration:none; /* no underline */
+      border-bottom: none;
+      padding:2px 6px;
+      border-radius:3px;
+      background: rgba(255,255,255,0.01);
+      cursor:default; /* not clickable */
+      -webkit-tap-highlight-color: transparent; /* remove blue tap highlight on mobile */
+    }
+
+    /* ensure clicking doesn't change color to blue (mobile browsers) */
+    .how-links a:visited, .how-links a:active, .how-links a:focus { color:var(--muted); outline:none; }
+
+    /* Center social icons inside the Follow Us card */
+        .social-center { display:flex; align-items:center; justify-content:center; gap:12px; width:100%; height:100%; }
+    .social-center img { width:26px; height:26px; display:block; }
+
+    /* Swiper (How to Use) - full width & height of the card, no left/right padding */
+    .swiper { width:100%; height: calc(var(--card-height) - 44px); /* leave space for top area and pagination + links */ }
+    /* The math above assumes ~44px for top + pagination + links; since card height is adjustable, swiper size adapts */
+    .swiper-wrapper, .swiper-slide { width:100%; height:100%; }
+    .swiper-slide img { width:100%; height:100%; object-fit:cover; display:block; }
+
+
+    /* Copyright: centered below the Follow Us card, not in a card */
+    .copyright {
+      text-align:center;
+      color:var(--muted);
+      font-size:10px;
+      margin-top:8px;
+    }
+
+    /* Hide mobile-card groups on wide screens */
+    @media (min-width:1209px) {
+      .mobile-stack { display:none; }
+      .desktop-footer { display:flex; gap:24px; justify-content:space-between; color:#cbd5e1; }
+      .desktop-footer .col { width:20%; min-width:160px; }
+      .desktop-footer h3 { color:#fff; font-size:18px; margin:0 0 8px 0; }
+      .desktop-footer a { color:#cbd5e1; text-decoration:none; }
+      .desktop-footer a:hover { color:var(--accent); }
+    }
+   .img h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: yellow;
+  display: flex;
+  justify-content: center;  /* centers horizontally */
+  align-items: center;
+}
+
+  </style>
+  <style data-name="Terms of Service"
+  >
+  /* ===== SUPPORT / LEGAL TEXT SIZE CONTROLS ===== */
+/* Change ONLY these values to resize text on mobile */
+
+:root{
+  --support-text-size: 12px;     /* body text size */
+  --support-line-height: 1.7;
+
+  --support-h2-size: 15px;       /* section heading size */
+  --support-h2-margin: 18px;
+
+  --support-link-size: 11px;     /* anchor / reference text */
+}
+
+/* Support content base */
+.support-content{
+  font-size: var(--support-text-size);
+  line-height: var(--support-line-height);
+  color:#cbd5e1;
+}
+
+/* Headings */
+.support-content h2{
+  font-size: var(--support-h2-size);
+  margin-top: var(--support-h2-margin);
+  margin-bottom: 6px;
+  color:#ffffff;
+  font-weight:600;
+}
+
+/* Lists */
+.support-content ul{
+  padding-left:16px;
+  margin:8px 0;
+}
+.support-content li{
+  margin-bottom:6px;
+}
+
+/* Anchor heading offset (for smooth jumping) */
+.support-content h2{
+  scroll-margin-top: 70px;
+}
+
+/* Optional small helper text */
+.support-note{
+  font-size: calc(var(--support-text-size) - 1px);
+  color:#9ca3af;
+}
+</style>
+  <style data-name="suggestions-placeholder">/* Root control — YOU can change text size easily */
+:root{
+--text-size: 8px;
+--border-color: rgba(255,255,255,0.6);
+--accent: #1d4ed8;
+}
+
+/* Container */
+.suggestion-box{
+max-width: 420px;
+margin: 20px auto;
+color: #fff;
+font-family: Inter, system-ui, sans-serif;
+}
+
+/* Stars */
+.stars{
+display:flex;
+gap:6px;
+margin-bottom:6px;
+font-size:14px;
+cursor:pointer;
+}
+.stars span{
+color:#444;
+}
+.stars span.active{
+color: gold;
+}
+
+/* Input wrapper */
+.input-wrapper{
+position:relative;
+}
+
+/* Textarea */
+textarea{
+width:100%;
+min-height:70px;
+resize:none;
+background:none;
+border:1px solid var(--border-color);
+border-radius:6px;
+padding:8px 26px 8px 8px;
+color:#fff;
+font-size:var(--text-size);
+outline:none;
+}
+
+/* Placeholder */
+textarea::placeholder{
+color:#cbd5e1;
+font-size:var(--text-size);
+}
+
+/* Send button */
+.send-btn{
+position:absolute;
+bottom:6px;
+right:6px;
+background:none;
+border:none;
+color:#fff;
+font-size:12px;
+cursor:pointer;
+}
+
+/* Status text */
+.status-text{
+margin-top:4px;
+font-size:9px;
+color:#9ca3af;
+}</style>
+</head>
+<body>
+      <footer class="footer">
+      <!-- MOBILE: only these four cards (How to Use, Contact, About Us, Follow Us) -->
+      <div class="mobile-stack" role="navigation" aria-label="Footer - mobile">
+        <!-- 1) How to Use (first) - full-bleed swiper slider with top page name and bottom tags -->
+        <div class="mobile-card card--how" aria-label="How to Use" style="--card-height:var(--card-height);">
+          <!-- Top small page name + subtitle -->
+          <div class="card-top">
+            <p class="page-name">Terms of Service</p>
+            <p class="page-sub"> trusted Password manager.</p>
+<!------------------------------------->
+<section class="support-content">
+  
+  <h2 id="terms-of-service">Terms of Service</h2>
+  
+  <p>
+    By using PASS – Password Manager, you agree to these Terms of Service.
+    PASS is provided as a self-managed tool designed to help you store and
+    organize credentials locally.
+  </p>
+  
+  <p>
+    We do not provide account recovery, password reset, cloud backup,
+    or remote access services.
+    All responsibility for data management lies with the user.
+  </p>
+  
+  <h2 id="user-responsibility">User Responsibility</h2>
+  
+  <p>
+    You are fully responsible for maintaining backups of your data using the
+    export feature.
+    We are not responsible for data loss caused by browser cache clearing,
+    device damage, system resets, or accidental deletion.
+  </p>
+  
+  <p>
+    PASS does not guarantee permanent data retention unless you actively
+    manage exports and backups.
+  </p>
+  
+  <h2 id="service-limitations">Service Limitations</h2>
+  
+  <p>
+    PASS is provided “as-is” without warranties of any kind.
+    We do not guarantee uninterrupted availability, compatibility with all
+    devices, or immunity from user-side security risks.
+  </p>
+  
+  <p>
+    We are not liable for any direct or indirect damages resulting from
+    the use or inability to use this application.
+  </p>
+  
+  <h2 id="acceptable-use">Acceptable Use</h2>
+  
+  <p>
+    PASS is intended for personal and lawful use only.
+    You agree not to misuse the app for illegal activities or attempts
+    to compromise security systems.
+  </p>
+  
+  <h2 id="termination">Termination</h2>
+  
+  <p>
+    You may stop using PASS at any time.
+    Since no accounts or servers exist, termination simply means
+    clearing the app or browser storage at your discretion.
+  </p>
+  
+  <h2 id="final-note">Final Note</h2>
+  
+  <p>
+    PASS exists to give you full control over your credentials in a simple,
+    private, and transparent way.
+    If you value ownership, offline security, and minimal design,
+    we hope this app serves you well.
+  </p>
+  
+</section>
+<section class="support-content">
+  
+  <h2 id="summary">Summary</h2>
+  
+  <p>
+    PASS does not collect your data, does not store it on servers,
+    and does not require registration or login.
+    Your credentials remain on your device, under your control.
+  </p>
+  
+  <p>
+    Use the app responsibly, export your data before clearing browser storage,
+    and protect your exported files.
+  </p>
+</section>
+<!------------------------------------->
+<!-- Suggestions Form -->
+<div class="suggestion-box">
+  <form id="suggestionForm">
+    
+    <!-- Star Rating -->
+    <div class="stars" id="starRating">
+      <span data-star="1">★</span>
+      <span data-star="2">★</span>
+      <span data-star="3">★</span>
+      <span data-star="4">★</span>
+      <span data-star="5">★</span>
+    </div>
+
+    <!-- Hidden fields for FormSubmit -->
+    <input type="hidden" name="_to" value="hariomkumar7118@gmail.com">
+    <input type="hidden" name="_subject" value="PASS App – User Suggestion">
+    <input type="hidden" name="Rating" id="ratingValue">
+    <input type="hidden" name="_captcha" value="false">
+
+    <!-- Suggestion Input -->
+    <div class="input-wrapper">
+      <textarea
+        name="Suggestion"
+        id="suggestionInput"
+        placeholder="Write your suggestion here…"
+        required
+      ></textarea>
+
+      <!-- Send Button -->
+      <button type="submit" class="send-btn" aria-label="Send">
+        ➤
+      </button>
+    </div>
+
+    <!-- Status Message -->
+    <div class="status-text" id="statusText"></div>
+
+  </form>
+</div>
+
+<!------------------------------------->
+          </div>
+        </div>
+        <!-- 2) Contact (was About Us) - removed call icon -->
+        <!-- 4) Follow Us (social icons centered) -->
+        <div class="mobile-card" aria-label="Follow Us">
+          <div class="card-inner" style="padding:10%;">
+            <div style="height: 100%; display:flex; align-items:center; justify-content:center;">
+              
+              <div class="social-center" role="list">
+                <a role="listitem" href="#" aria-label="Facebook"><img src="1024px-Facebook_Logo_(2019).png" alt="Facebook"></a>
+                <a role="listitem" href="#" aria-label="Instagram"><img src="pngtree-three-dimensional-instagram-icon-png-image_6618437.png" alt="Instagram"></a>
+                <a role="listitem" href="#" aria-label="GitHub"><img src="github.png" alt="GitHub"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div> <!-- end mobile-stack -->
+      
+      <!-- COPYRIGHT (centered below the Follow Us card, not in a card) -->
+      <div class="copyright">&copy; 2025 Pass. All Rights Reserved.</div>
+      
+      <!-- Simple desktop footer (kept minimal; hidden on mobile) 
+    <div class="desktop-footer" aria-hidden="true" style="margin-top:18px;">
+      <div class="col">
+        <h3>Pass</h3>
+        <div class="desktop-only">Your trusted password manager.</div>
+      </div>
+      <div class="col">
+        <h3>How to Use</h3>
+        <div class="desktop-only">
+          <a href="#">Create an Account</a><br>
+          <a href="#">Add Your First App</a>
+        </div>
+      </div>
+      <div class="col">
+        <h3>Contact</h3>
+        <div class="desktop-only">
+          <a href="mailto:contact@yourcompany.com">contact@yourcompany.com</a><br>
+          <a href="https://wa.me/yourwhatsappnumber">WhatsApp</a>
+        </div>
+      </div>
+      <div class="col">
+        <h3>Follow Us</h3>
+        <div class="desktop-only">Social icons here</div>
+      </div>
+    </div> -->
+    </footer>
+    <script data-name="longpress-blocked.js">
+      (function() {
+        let longPressTimer = null;
+        const LONG_PRESS_TIME = 500; // ms
+        
+        // Block right click
+        document.addEventListener("contextmenu", e => e.preventDefault());
+        
+        // Block text selection & copy
+        document.addEventListener("selectstart", e => e.preventDefault());
+        document.addEventListener("copy", e => e.preventDefault());
+        document.addEventListener("cut", e => e.preventDefault());
+        
+        // Long-press detection (mobile)
+        document.addEventListener("touchstart", function(e) {
+          // Allow form elements & buttons
+          const tag = e.target.tagName;
+          if (["INPUT", "TEXTAREA", "BUTTON", "SELECT", "A"].includes(tag)) return;
+          
+          longPressTimer = setTimeout(() => {
+            e.preventDefault();
+          }, LONG_PRESS_TIME);
+        }, { passive: true });
+        
+        document.addEventListener("touchend", () => {
+          clearTimeout(longPressTimer);
+        });
+        
+        document.addEventListener("touchmove", () => {
+          clearTimeout(longPressTimer);
+        });
+        
+        // Block image drag
+        document.addEventListener("dragstart", e => {
+          if (e.target.tagName === "IMG") {
+            e.preventDefault();
+          }
+        });
+      })();
+    </script>
+    <script data-name="tap-highlights block ed.js">
+      (function() {
+        const style = document.createElement("style");
+        style.textContent = `
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+    }
+  `;
+        document.head.appendChild(style);
+      })();
+    </script>
+    <script data-name="fast-reply suggestions-sending.js">
+  const stars = document.querySelectorAll('#starRating span');
+  const ratingInput = document.getElementById('ratingValue');
+  const form = document.getElementById('suggestionForm');
+  const statusText = document.getElementById('statusText');
+  const sendBtn = document.querySelector('.send-btn');
+  const suggestionInput = document.getElementById('suggestionInput');
+  
+  let selectedRating = 0;
+  
+  /* Star selection */
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = Number(star.dataset.star);
+      ratingInput.value = `${selectedRating} / 5`;
+      
+      stars.forEach(s => s.classList.remove('active'));
+      for (let i = 0; i < selectedRating; i++) {
+        stars[i].classList.add('active');
+      }
+    });
+  });
+  
+  /* Bot reply container */
+  const botReply = document.createElement('div');
+  botReply.style.fontSize = statusText.style.fontSize || '9px';
+  botReply.style.color = '#9ca3af';
+  botReply.style.textAlign = 'right';
+  botReply.style.marginTop = '4px';
+  statusText.after(botReply);
+  
+  /* Typing dots animation */
+  function typingDots(el, baseText = "Reply") {
+    let dots = 0;
+    el.textContent = baseText;
+    const interval = setInterval(() => {
+      dots = (dots + 1) % 5;
+      el.textContent = baseText + '.'.repeat(dots);
+    }, 400);
+    return interval;
+  }
+  
+  /* Smart reply generator */
+  function generateBotReply(text, rating) {
+    text = text.toLowerCase();
+    
+    if (rating >= 4) {
+      return "Thank you for the positive feedback. We're glad PASS is helping you.";
+    }
+    if (text.includes("slow") || text.includes("delay")) {
+      return "Thanks for reporting this. Performance improvements are in progress.";
+    }
+    if (text.includes("bug") || text.includes("error")) {
+      return "We appreciate the report. This will help improve stability.";
+    }
+    if (text.includes("feature") || text.includes("add")) {
+      return "Great suggestion. Your idea has been noted for future updates.";
+    }
+    if (rating <= 2) {
+      return "We're sorry for the inconvenience. Your feedback matters.";
+    }
+    return "Thank you for your suggestion. We value every user response.";
+  }
+  
+  /* Fast submit + auto-vanishing bot reply */
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (!selectedRating) {
+      statusText.textContent = "Please select a star rating.";
+      return;
+    }
+    
+    const userText = suggestionInput.value.trim();
+    const ratingSnapshot = selectedRating; // preserve rating
+    
+    statusText.textContent = "Sending…";
+    sendBtn.disabled = true;
+    sendBtn.style.opacity = "0.5";
+    
+    const formData = new FormData(form);
+    
+    fetch("https://formsubmit.co/ajax/princekumar.webdevloper@gmail.com", {
+        method: "POST",
+        body: formData
+      })
+      .finally(() => {
+        statusText.textContent = "Suggestion sent successfully";
+        form.reset();
+        stars.forEach(s => s.classList.remove('active'));
+        selectedRating = 0;
+        sendBtn.disabled = false;
+        sendBtn.style.opacity = "1";
+        
+        /* Bot typing */
+        botReply.textContent = "";
+        const typing = typingDots(botReply, "Reply");
+        
+        setTimeout(() => {
+          clearInterval(typing);
+          botReply.textContent = generateBotReply(userText, ratingSnapshot);
+          
+          /* ⏱ Auto-vanish after 5 seconds */
+          setTimeout(() => {
+            botReply.textContent = "";
+          }, 5000);
+          
+        }, 2200);
+      });
+  });
+</script>
+</body>
+</html>
